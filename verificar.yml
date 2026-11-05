@@ -1,0 +1,43 @@
+---
+- name: Verificar los resultados sin modificar los servidores
+  hosts: servidores
+  become: true
+  gather_facts: false
+
+  tasks:
+    - name: Consultar el usuario itla
+      ansible.builtin.getent:
+        database: passwd
+        key: itla
+
+    - name: Consultar la carpeta app
+      ansible.builtin.stat:
+        path: /home/itla/app
+      register: app
+
+    - name: Consultar hola.txt
+      ansible.builtin.stat:
+        path: /home/itla/app/hola.txt
+      register: hola
+
+    - name: Leer el contenido de hola.txt
+      ansible.builtin.slurp:
+        src: /home/itla/app/hola.txt
+      register: contenido
+
+    - name: Consultar los paquetes instalados
+      ansible.builtin.package_facts:
+        manager: apt
+
+    - name: Comprobar usuario, carpeta, archivo y aplicaciones
+      ansible.builtin.assert:
+        that:
+          - "'itla' in ansible_facts.getent_passwd"
+          - app.stat.exists and app.stat.isdir
+          - app.stat.pw_name == 'itla'
+          - hola.stat.exists and hola.stat.isreg
+          - hola.stat.pw_name == 'itla'
+          - "(contenido.content | b64decode) == 'Hola desde Ansible!\n'"
+          - "'cowsay' in ansible_facts.packages"
+          - "'htop' in ansible_facts.packages"
+        success_msg: Practica completada correctamente en este servidor.

@@ -1,0 +1,35 @@
+services:
+  servidor1:
+    build: .
+    image: practica8-ubuntu-ssh:local
+    hostname: servidor1
+    ports:
+      - "127.0.0.1:2221:22"
+
+  servidor2:
+    build: .
+    image: practica8-ubuntu-ssh:local
+    hostname: servidor2
+    ports:
+      - "127.0.0.1:2222:22"
+
+  servidor3:
+    build: .
+    image: practica8-ubuntu-ssh:local
+    hostname: servidor3
+    ports:
+      - "127.0.0.1:2223:22"
+
+  servidor4:
+    build: .
+    image: practica8-ubuntu-ssh:local
+    hostname: servidor4
+    ports:
+      - "127.0.0.1:2224:22"
+
+  servidor5:
+    build: .
+    image: practica8-ubuntu-ssh:local
+    hostname: servidor5
+    ports:
+      - "127.0.0.1:2225:22"
